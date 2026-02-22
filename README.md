@@ -1,10 +1,8 @@
 # RRALLOC
 Originally named "rotalloc" – now renamed to RRALLOC:
-	* "rotalloc" was implying rotational storage media, but this
-		policy is in concept orthogonal to that → RRALLOC
-	* In concept, it clearly exhibits round-robin behavior, hence the
-		name change
-	* This patch is V2
+* "rotalloc" was implying rotational storage media, but this policy is in concept orthogonal to that → RRALLOC
+* In concept, it clearly exhibits round-robin behavior, hence the name change
+* This patch is V2
 
 Support for the round-robin allocation policy as a new mount option.
 The policy rotates the starting block group for new allocations across
@@ -23,6 +21,6 @@ This also allows the rotating allocator to evolve independently in the
 future without increasing complexity in the regular allocator.
 
 The policy was tested using v6.18.9 stable locally with the new mount
-option "rotalloc" enabled, confirmed working as described!
+option "rrlloc" enabled, confirmed working as described!
 
 NOTE: "proof of concept" showcase!
