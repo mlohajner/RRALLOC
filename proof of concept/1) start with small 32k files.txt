@@ -1,0 +1,60 @@
+ 19:40:44 /mnt/rotalloc 🭬
+mount | grep /mnt/rotalloc
+/dev/sda5 on /mnt/rotalloc type ext4 (rw,noatime,rralloc)
+
+**** /mnt/rotalloc is an ext4 mount with rralloc enabled
+
+ 19:40:45 /mnt/rotalloc 🭬
+sudo fstrim . -v
+.: 65,1 GiB (69927264256 bytes) trimmed
+ 19:40:51 /mnt/rotalloc 🭬
+la
+
+**** LBA is empty and trimmed (fresh start)
+
+ 19:41:21 /mnt/rotalloc 🭬
+time cp ~/file .
+
+real	0m0,010s
+user	0m0,004s
+sys	0m0,008s
+ 19:41:36 /mnt/rotalloc 🭬
+sync; filefrag -v file
+Filesystem type is: ef53
+File size of file is 32768 (8 blocks of 4096 bytes)
+ ext:     logical_offset:        physical_offset: length:   expected: flags:
+   0:        0..       7:   17834536..  17834543:      8:             last,eof
+file: 1 extent found
+ 19:41:46 /mnt/rotalloc 🭬
+time cp ~/file file1
+
+real	0m0,010s
+user	0m0,007s
+sys	0m0,004s
+ 19:41:51 /mnt/rotalloc 🭬
+sync; filefrag -v file1
+Filesystem type is: ef53
+File size of file1 is 32768 (8 blocks of 4096 bytes)
+ ext:     logical_offset:        physical_offset: length:   expected: flags:
+   0:        0..       7:   26148864..  26148871:      8:             last,eof
+file1: 1 extent found
+ 19:42:03 /mnt/rotalloc 🭬
+time cp ~/file file2
+
+real	0m0,009s
+user	0m0,002s
+sys	0m0,008s
+ 19:42:06 /mnt/rotalloc 🭬
+sync; filefrag -v file2
+Filesystem type is: ef53
+File size of file2 is 32768 (8 blocks of 4096 bytes)
+ ext:     logical_offset:        physical_offset: length:   expected: flags:
+   0:        0..       7:       9771..      9778:      8:             last,eof
+file2: 1 extent found
+ marek@ideacentre 🭬🭨/mnt/rotalloc 🭬
+ READY▪🭬
+
+**** Copied a couple of small (32k) files => files are allocated in zones
+	depending on CPU which allocates the file
+**** NOTE: per-cpu cursors are spread evenly across the LBA NOT ONLY to
+	prevent contention and race condiditons, they help use the entire LBA

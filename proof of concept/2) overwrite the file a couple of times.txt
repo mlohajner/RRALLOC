@@ -1,0 +1,37 @@
+ 19:44:37 /mnt/rotalloc 🭬
+sync; filefrag -v file
+Filesystem type is: ef53
+File size of file is 32768 (8 blocks of 4096 bytes)
+ ext:     logical_offset:        physical_offset: length:   expected: flags:
+   0:        0..       7:   26148872..  26148879:      8:             last,eof
+file: 1 extent found
+ 19:44:46 /mnt/rotalloc 🭬
+time cp ~/file .
+
+real	0m0,009s
+user	0m0,002s
+sys	0m0,009s
+ 19:44:48 /mnt/rotalloc 🭬
+sync; filefrag -v file
+Filesystem type is: ef53
+File size of file is 32768 (8 blocks of 4096 bytes)
+ ext:     logical_offset:        physical_offset: length:   expected: flags:
+   0:        0..       7:   26148880..  26148887:      8:             last,eof
+file: 1 extent found
+ 19:44:53 /mnt/rotalloc 🭬
+time cp ~/file .
+
+real	0m0,010s
+user	0m0,003s
+sys	0m0,008s
+ 19:44:54 /mnt/rotalloc 🭬
+sync; filefrag -v file
+Filesystem type is: ef53
+File size of file is 32768 (8 blocks of 4096 bytes)
+ ext:     logical_offset:        physical_offset: length:   expected: flags:
+   0:        0..       7:       9779..      9786:      8:             last,eof
+file: 1 extent found
+ marek@ideacentre 🭬🭨/mnt/rotalloc 🭬
+ READY▪🭬
+
+**** File is floating in current zone or allocated to other CPU/zone

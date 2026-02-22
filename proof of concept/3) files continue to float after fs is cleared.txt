@@ -1,0 +1,44 @@
+*** Deleted all files and copied another and rewritten a couple of times
+
+ 19:44:48 /mnt/rotalloc 🭬
+sync; filefrag -v file
+Filesystem type is: ef53
+File size of file is 32768 (8 blocks of 4096 bytes)
+ ext:     logical_offset:        physical_offset: length:   expected: flags:
+   0:        0..       7:   26148880..  26148887:      8:             last,eof
+file: 1 extent found
+ 19:44:53 /mnt/rotalloc 🭬
+time cp ~/file .
+
+real	0m0,010s
+user	0m0,003s
+sys	0m0,008s
+ 19:44:54 /mnt/rotalloc 🭬
+sync; filefrag -v file
+Filesystem type is: ef53
+File size of file is 32768 (8 blocks of 4096 bytes)
+ ext:     logical_offset:        physical_offset: length:   expected: flags:
+   0:        0..       7:       9779..      9786:      8:             last,eof
+file: 1 extent found
+ 19:45:58 /mnt/rotalloc 🭬
+la
+file  file1  file2
+ 19:48:14 /mnt/rotalloc 🭬
+rm *
+ 19:48:19 /mnt/rotalloc 🭬
+time cp ~/file .
+
+real	0m0,012s
+user	0m0,005s
+sys	0m0,005s
+ 19:48:22 /mnt/rotalloc 🭬
+sync; filefrag -v file
+Filesystem type is: ef53
+File size of file is 32768 (8 blocks of 4096 bytes)
+ ext:     logical_offset:        physical_offset: length:   expected: flags:
+   0:        0..       7:       9787..      9794:      8:             last,eof
+file: 1 extent found
+ marek@ideacentre 🭬🭨/mnt/rotalloc 🭬
+ READY▪🭬
+
+**** Files continue to fload inside apropriate LBA zones

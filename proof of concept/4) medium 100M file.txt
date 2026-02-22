@@ -1,0 +1,61 @@
+ 19:50:08 /mnt/rotalloc 🭬
+time cp ~/100M file
+
+real	0m0,033s
+user	0m0,002s
+sys	0m0,032s
+ 19:50:15 /mnt/rotalloc 🭬
+sync; filefrag -v file
+Filesystem type is: ef53
+File size of file is 104857600 (25600 blocks of 4096 bytes)
+ ext:     logical_offset:        physical_offset: length:   expected: flags:
+   0:        0..   10239:   26312704..  26322943:  10240:            
+   1:    10240..   25599:   26322945..  26338304:  15360:   26322944: last,eof
+file: 2 extents found
+ 19:50:29 /mnt/rotalloc 🭬
+time cp ~/100M file
+
+real	0m0,034s
+user	0m0,004s
+sys	0m0,031s
+ 19:50:31 /mnt/rotalloc 🭬
+sync; filefrag -v file
+Filesystem type is: ef53
+File size of file is 104857600 (25600 blocks of 4096 bytes)
+ ext:     logical_offset:        physical_offset: length:   expected: flags:
+   0:        0..       0:   26322944..  26322944:      1:            
+   1:        1..    6143:   26338305..  26344447:   6143:   26322945:
+   2:     6144..   25599:   26344449..  26363904:  19456:   26344448: last,eof
+file: 3 extents found
+ 19:50:34 /mnt/rotalloc 🭬
+time cp ~/100M file
+
+real	0m0,042s
+user	0m0,006s
+sys	0m0,038s
+ 19:50:36 /mnt/rotalloc 🭬
+sync; filefrag -v file
+Filesystem type is: ef53
+File size of file is 104857600 (25600 blocks of 4096 bytes)
+ ext:     logical_offset:        physical_offset: length:   expected: flags:
+   0:        0..   10239:   26363905..  26374144:  10240:            
+   1:    10240..   25599:   26374146..  26389505:  15360:   26374145: last,eof
+file: 2 extents found
+ 19:50:39 /mnt/rotalloc 🭬
+time cp ~/100M file
+
+real	0m0,041s
+user	0m0,002s
+sys	0m0,040s
+ 19:50:40 /mnt/rotalloc 🭬
+sync; filefrag -v file
+Filesystem type is: ef53
+File size of file is 104857600 (25600 blocks of 4096 bytes)
+ ext:     logical_offset:        physical_offset: length:   expected: flags:
+   0:        0..   10239:   26389506..  26399745:  10240:            
+   1:    10240..   25599:   26399747..  26415106:  15360:   26399746: last,eof
+file: 2 extents found
+ marek@ideacentre 🭬🭨/mnt/rotalloc 🭬
+ READY▪🭬
+
+**** Similar test with medium-sized 100 MiB file(s)
