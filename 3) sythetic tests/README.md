@@ -46,17 +46,17 @@ introduced without compromising baseline I/O characteristics.
 Across tested workloads, rralloc preserves expected I/O behavior and
 does not introduce performance regressions of practical significance.
 
-
-Test Hardware:
-OS        Fedora Linux 42 Workstation x86_64
-Host      90HU007QGE ideacentre 510-15ICB
-Kernel    6.18.9-dirty
-CPU       Intel i5-8400 (6 cores) @ 2.801GHz
-GPU1      AMD Radeon RX 460/560D / Pro 450/455/460/555/555X/560/560X
-GPU2      Intel CoffeeLake-S GT2 / UHD Graphics 630
-Memory    1379 MiB / 31,958 MiB
-NVMe      INTEL SSDPEKNW512G8H (HPS1)
-SATA SSD  Samsung SSD 860 PRO 256GB (RVM02B6Q)
+| Test     | Hardware                                   |
+| -------- | ------------------------------------------ |
+| OS       | Fedora Linux 42 Workstation x86_64         |
+| Host     | 90HU007QGE ideacentre 510-15ICB            |
+| Kernel   | 6.18.9-dirty                               |
+| CPU      | Intel i5-8400 (6 cores) @ 2.801GHz         |
+| GPU1     | AMD Radeon RX 560                          |
+| GPU2     | Intel CoffeeLake-S GT2 / UHD Graphics 630  |
+| Memory   | 1379 MiB / 31,958 MiB                      |
+| NVMe     | INTEL SSDPEKNW512G8H (HPS1)                |
+| SATA SSD | Samsung SSD 860 PRO 256GB (RVM02B6Q)       |
 
 Note:
 These results reflect synthetic tests on the described hardware.
