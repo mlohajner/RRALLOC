@@ -30,22 +30,22 @@ fio --name=allocstress --directory=. --rw=write --bs=4k --numjobs=48 \
 
 # Results summary:
 
-| Test        | Alokator | BW (MiB/s) | IOPS  | Avg lat |
-+-------------+----------+------------+-------+---------+
-| seqwrite    | Regular  | 497        | 496   | 9.19 ms |
-|             | rralloc  | 538        | 537   | 9.37 ms |
-+-------------+----------+------------+-------+---------+
-| smallfiles  | Regular  | 707        | 181k  | 2.03 µs |
-|             | rralloc  | 586        | 150k  | 2.18 µs |
-+-------------+----------+------------+-------+---------+
-| allocstress | Regular  | 166        | 42.4k | 1.13 ms |
-|             | rralloc  | 283        | 72.5k | 0.66 ms |
+| Test        | Allocator | BW (MiB/s) | IOPS  | Avg lat |
+| ----------- | --------- | ---------- | ----- | ------- |
+| seqwrite    | Regular   | 497        | 496   | 9.19 ms |
+|             | rralloc   | 538        | 537   | 9.37 ms |
+| smallfiles  | Regular   | 707        | 181k  | 2.03 µs |
+|             | rralloc   | 586        | 150k  | 2.18 µs |
+| allocstress | Regular   | 166        | 42.4k | 1.13 ms |
+|             | rralloc   | 283        | 72.5k | 0.66 ms |
+
 
 The results indicate that a round-robin allocation strategy can be
 introduced without compromising baseline I/O characteristics.
 
 Across tested workloads, rralloc preserves expected I/O behavior and
 does not introduce performance regressions of practical significance.
+
 
 Test Hardware:
 OS        Fedora Linux 42 Workstation x86_64
