@@ -1,0 +1,12 @@
+ 16:53:19 /mnt/rotalloc 🭬
+find ~/kernel.org -type f | wc -l
+182515
+
+ 16:53:30 /mnt/rotalloc 🭬
+du -sh ~/kernel.org
+27G	/home/marek/kernel.org
+
+ marek@ideacentre 🭬🭨/mnt/rotalloc 🭬
+ READY▪🭬
+
+*** kernel.org files (linx  kernel about 180 000 files 27 GiB)

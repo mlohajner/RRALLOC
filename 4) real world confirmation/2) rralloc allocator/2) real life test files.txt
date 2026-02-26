@@ -1,0 +1,17 @@
+**** THE TEST FILES ARE KERNEL FILES:
+
+ 16:18:36 /mnt/rotalloc 🭬
+find ~/kernel.org -type f | wc -l
+182515
+
+ 16:18:48 /mnt/rotalloc 🭬
+du -sh ~/kernel.org
+27G	/home/marek/kernel.org
+
+ 16:19:33 /mnt/rotalloc 🭬
+: This kernel has been worked on, compiled etc... so quite big:
+
+ 16:19:55 /mnt/rotalloc 🭬
+: 180 000+ files 27 GiB in total
+ marek@ideacentre 🭬🭨/mnt/rotalloc 🭬
+ READY▪🭬

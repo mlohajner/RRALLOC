@@ -1,0 +1,94 @@
+time cp -R ~/kernel.org .
+cp: cannot create regular file './kernel.org/linux/.git/objects/pack/pack-59788ac557795f27ec97ff511af145b298feecdd.pack': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/pack/pack-59788ac557795f27ec97ff511af145b298feecdd.idx': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/pack/pack-59788ac557795f27ec97ff511af145b298feecdd.rev': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/pack/pack-f75abdd2d7f9eeec77b1f6934fd01609bb5f3561.idx': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/pack/pack-646ba5cc5b3a76ae71f17f9c45754f889321604e.idx': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/pack/pack-646ba5cc5b3a76ae71f17f9c45754f889321604e.rev': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/pack/pack-f75abdd2d7f9eeec77b1f6934fd01609bb5f3561.pack': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/pack/pack-f75abdd2d7f9eeec77b1f6934fd01609bb5f3561.rev': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/pack/pack-646ba5cc5b3a76ae71f17f9c45754f889321604e.pack': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/pack/pack-e9a68e71d85f42e494dfa6497216104a08da1a2b.pack': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/pack/pack-6ac7a9c9d185e55089ae31ac2cb4c849b489eb6f.pack': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/pack/pack-6ac7a9c9d185e55089ae31ac2cb4c849b489eb6f.idx': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/pack/pack-6ac7a9c9d185e55089ae31ac2cb4c849b489eb6f.rev': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/pack/pack-e9a68e71d85f42e494dfa6497216104a08da1a2b.idx': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/pack/pack-e9a68e71d85f42e494dfa6497216104a08da1a2b.rev': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/21/0332affd47b9730c03dda05b90bc98cd94b788': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/63/1099e9ce46257fc53e20ce8804bc71abb39dc7': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/65/ae7b4708e6cf41e2c38a304345694652d43bf0': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/1e/4cf6a40c88ab23155340fb709f23ab27e428f0': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/97/a2b64a1e894e089cea764b9d274cd0ad80ce9d': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/c7/2cee642eca9cd3198c83eea206d42496661cd4': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/b6/08d707307b45091d9939887e88e7a943bffd99': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/27/d7a7dd704456a1de06faba559879994c545241': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/b4/9442f88743e95e6fa7b97019b7cb0fc0bcb4c0': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/13/db3b2543e9c1a2c3029d577c6eb4e2595fd60a': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/c6/09010e13757146c39a3c59b40b8afa56c466ab': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/33/fd91b6499591f71b93e99cb4249337420a9431': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/dc/c2decd145e23ba403d683e20c6d5d7f6f3bebd': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/d3/842090312eec87069424b429972bc6c32debed': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/3e/b9592a0469f65a120ab94d60fcb63bed46ce11': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/c3/1b61e19e2f6fddd6d376f3171f16ca4d7ed1dd': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/56/606f7d2c74c85efabb5d4d72782ad7f650aade': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/4a/4bb522f0b6f020b372ec67ff5e948e7e8196dd': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/cb/bb7c05d7a2f5ef2d7d1c3c73176c48275879b7': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/24/0f80cc08990db9ae935b7154da0ffdefeb6a7c': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/cd/c2d52abc26bd0a03ad96761067354fad413ece': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/41/c3e68e935b4687da27abd42be9e2edd1956c01': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/76/61bba6f239ce3eb07df28b184e07ef0ea941c5': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/8b/e95df49ab675b57fcc063479d62fae6a37fa27': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/09/99aa18ef2a000047e504b1299ccee2f65fffca': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/43/d9c1df1e5574634310d971ef341eb7a27df1cf': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/43/5038b73742052bb910d56edad398b89630f5ea': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/f5/3501bbfb4bb423f7eb5c2269625de9d86d8a29': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/f5/fc66be87e63435317e20164c254d7117968d36': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/05/df8c21a4cb0d1f0f26be862d452168a880fa91': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/6f/6fd1875c87c8e0b9ea176540e57d381681b9e5': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/d7/9d7663587803ab6ebc5ad4e952ea08cce3ecd7': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/d7/fab3df9e531dd5d4d28a6a8c2f54ac70752158': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/d7/1c2aaaefd73e2c20d24ad6185331e4aa38dcd4': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/84/4c25686c5527db41171007e1cb1caf9ad6308a': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/cf/a05cae83e5476300301967b7275c990a3960b1': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/5f/d0a1df5d05ad066e5618ccdd3d0fa6cb686c27': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/67/b3da8d3051fba7e1523b3afce4f71c658f15f8': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/e3/a43633023e3cacaca60d4b8972d084a2b06236': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/e3/6aa8089cbd8318acf640b6c4fd43d6315236a2': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/da/786dc7ee994f724394e0d25190609634ba5433': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/d1/d85783295fbe20992ee77f6520353039656cd2': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/80/720c373125bd102cd2974ba965398e75945be2': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/98/287132626e34cf73a908c3c676b0b542578acc': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/2d/d08388ea87331d0c3a8fff03ca5d3c34529494': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/16/0b80ef1db213f3bf4ab547eb4f51d6760217cf': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/bf/8780b0d8fc8c764332e07bb402cd5befe82c7c': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/7b/cd1fe7cf883a1edac3273c17953b20857bfdd5': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/ba/f0dbce712b61065f2f70b30d38272849810272': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/3a/07b163fdfda08db8b30fe9d7130175e22ad982': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/df/5dd964474030a56004b4b4d244de8dad653efe': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/df/3805bb4a2fd88161b42ab268c247a6abaea2f0': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/a7/37edfbe31ff623e60a83f861405d01f7e8bc43': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/ef/66ca757b443792205a9eb02ceb0caacbe690cc': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/eb/4c0be4a5c35d081f55f74b6b148761fdc4cfe7': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/4c/51a27d4225b3bebeb4228e498ea1760c3be2ab': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/ec/339f54c3053538f59b06f7cdee51ac27e95900': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/39/2e6be6b648a8f084e35da90eff68723708b277': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/74/f79652c674a465e7314c8b7afcdd2fd48f4453': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/e1/2a1a041bf4e2f85182ad358f47cdafffdfceed': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/71/d7d67b9e43fd3b89d195a21f17b70519a42307': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/32/7ca7d400287b31b90ee9d06ee1fa4ecc86897d': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/f9/07b9caf1c97ee8e57c0fd3796ba75beec0c150': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/30/9190ce05aeffcd46848ccf4a5d373ca2a17357': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/3d/709f1db5c3941ac7e11abec289926e10581116': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/7a/980d104beb87c9c293fd061195b68c33cfc186': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/b7/a61b9c369503a9145f6e7785ad1748f7e6f286': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/31/40f67bd8206210a2ad67492a72b14655bd3c4c': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/9b/541adc45cf7815c5ce796d76aafc419dd75c0f': Permission denied
+cp: cannot create regular file './kernel.org/linux/.git/objects/9b/be3b7d6c1d84ac78cc73a9c8aaf20148c7ccee': Permission denied
+
+real	0m54,330s
+user	0m0,668s
+sys	0m17,314s
+ marek@ideacentre 🭬🭨/mnt/rotalloc 🭬
+ READY▪🭬
+
+**** Some git files are write protected (again, anoying but not unexpected)

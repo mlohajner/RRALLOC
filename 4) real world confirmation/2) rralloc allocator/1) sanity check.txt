@@ -1,0 +1,17 @@
+ 16:12:10 /mnt/rotalloc 🭬
+uname -a
+Linux ideacentre 6.18.9-dirty #51 SMP PREEMPT_DYNAMIC Sun Feb 22 19:23:26 CET 2026 x86_64 GNU/Linux
+
+ 16:12:25 /mnt/rotalloc 🭬
+sudo fstrim . -v
+.: 100 GiB (107348537344 bytes) trimmed
+
+ 16:13:30 /mnt/rotalloc 🭬
+mount | grep /mnt/rotalloc
+/dev/sda5 on /mnt/rotalloc type ext4 (rw,noatime,rralloc)
+
+ marek@ideacentre 🭬🭨/mnt/rotalloc 🭬
+ READY▪🭬
+
+**** We use modified kernel here
+**** mount is rralloc, empty and trimmed

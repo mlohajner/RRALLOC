@@ -1,0 +1,10 @@
+ 16:22:12 /mnt/rotalloc 🭬
+time cp -R ~/kernel.org .
+
+real	1m2,754s
+user	0m0,599s
+sys	0m18,926s
+
+ marek@ideacentre 🭬🭨/mnt/rotalloc 🭬
+ READY▪🭬
+
