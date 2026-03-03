@@ -1,0 +1,139 @@
+BLIND TEST 1 *****************************************************************************
+
+ 19:35:23 /mnt/rotalloc 🭬
+fio --name=allocstress  --directory=.   --rw=write      --bs=4k         --numjobs=48    --size=2G       --ioengine=psync        --time_based    --runtime=180   --group_reporting
+allocstress: (g=0): rw=write, bs=(R) 4096B-4096B, (W) 4096B-4096B, (T) 4096B-4096B, ioengine=psync, iodepth=1
+...
+fio-3.37
+Starting 48 processes
+Jobs: 48 (f=48): [W(48)][100.0%][w=505MiB/s][w=129k IOPS][eta 00m:00s]
+allocstress: (groupid=0, jobs=48): err= 0: pid=76953: Tue Mar  3 19:38:23 2026
+  write: IOPS=136k, BW=533MiB/s (558MB/s)(93.6GiB/180059msec); 0 zone resets
+    clat (nsec): min=1339, max=1464.1M, avg=351510.43, stdev=5335785.67
+     lat (nsec): min=1371, max=1464.1M, avg=351585.54, stdev=5335837.76
+    clat percentiles (nsec):
+     |  1.00th=[     1448],  5.00th=[     1704], 10.00th=[     1896],
+     | 20.00th=[     1944], 30.00th=[     2024], 40.00th=[     2256],
+     | 50.00th=[     2480], 60.00th=[     2704], 70.00th=[     2896],
+     | 80.00th=[     3152], 90.00th=[     3472], 95.00th=[     4128],
+     | 99.00th=[     7520], 99.50th=[ 58458112], 99.90th=[ 60555264],
+     | 99.95th=[ 65798144], 99.99th=[127401984]
+   bw (  KiB/s): min=89383, max=8500501, per=100.00%, avg=549145.23, stdev=12392.36, samples=17135
+   iops        : min=22335, max=2125117, avg=137284.70, stdev=3098.08, samples=17135
+  lat (usec)   : 2=27.96%, 4=66.76%, 10=4.41%, 20=0.09%, 50=0.15%
+  lat (usec)   : 100=0.05%, 250=0.01%, 500=0.01%, 750=0.01%, 1000=0.01%
+  lat (msec)   : 2=0.01%, 4=0.01%, 10=0.02%, 20=0.01%, 50=0.01%
+  lat (msec)   : 100=0.52%, 250=0.01%, 500=0.01%, 750=0.01%, 1000=0.01%
+  lat (msec)   : 2000=0.01%
+  cpu          : usr=0.11%, sys=0.78%, ctx=167809, majf=1, minf=652
+  IO depths    : 1=100.0%, 2=0.0%, 4=0.0%, 8=0.0%, 16=0.0%, 32=0.0%, >=64=0.0%
+     submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     complete  : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     issued rwts: total=0,24547143,0,0 short=0,0,0,0 dropped=0,0,0,0
+     latency   : target=0, window=0, percentile=100.00%, depth=1
+
+Run status group 0 (all jobs):
+  WRITE: bw=533MiB/s (558MB/s), 533MiB/s-533MiB/s (558MB/s-558MB/s), io=93.6GiB (101GB), run=180059-180059msec
+
+Disk stats (read/write):
+  sda: ios=0/29014, sectors=0/185582024, merge=0/3191, ticks=0/5571131, in_queue=5575036, util=99.08%
+ marek@ideacentre 🭬🭨/mnt/rotalloc 🭬
+ READY▪🭬
+
+BLIND TEST 2 *****************************************************************************
+
+ 19:53:29 /mnt/rotalloc 🭬
+fio --name=allocstress  --directory=.   --rw=write      --bs=4k         --numjobs=48    --size=2G       --ioengine=psync        --time_based    --runtime=180   --group_reporting
+allocstress: (g=0): rw=write, bs=(R) 4096B-4096B, (W) 4096B-4096B, (T) 4096B-4096B, ioengine=psync, iodepth=1
+...
+fio-3.37
+Starting 48 processes
+Jobs: 48 (f=48): [W(48)][100.0%][w=504MiB/s][w=129k IOPS][eta 00m:00s]
+allocstress: (groupid=0, jobs=48): err= 0: pid=2478: Tue Mar  3 19:56:29 2026
+  write: IOPS=136k, BW=533MiB/s (558MB/s)(93.6GiB/180059msec); 0 zone resets
+    clat (nsec): min=1341, max=268947k, avg=351505.78, stdev=4862917.26
+     lat (nsec): min=1372, max=268947k, avg=351567.74, stdev=4862972.13
+    clat percentiles (nsec):
+     |  1.00th=[     1432],  5.00th=[     1688], 10.00th=[     1864],
+     | 20.00th=[     1928], 30.00th=[     1976], 40.00th=[     2160],
+     | 50.00th=[     2416], 60.00th=[     2672], 70.00th=[     2864],
+     | 80.00th=[     3152], 90.00th=[     3440], 95.00th=[     3984],
+     | 99.00th=[     6816], 99.50th=[ 58458112], 99.90th=[ 60555264],
+     | 99.95th=[ 62652416], 99.99th=[102236160]
+   bw (  KiB/s): min=192936, max=7630384, per=100.00%, avg=546236.44, stdev=11880.85, samples=17229
+   iops        : min=48234, max=1907593, avg=136558.45, stdev=2970.21, samples=17229
+  lat (usec)   : 2=32.85%, 4=62.20%, 10=4.12%, 20=0.07%, 50=0.12%
+  lat (usec)   : 100=0.05%, 250=0.01%, 500=0.01%, 750=0.01%, 1000=0.01%
+  lat (msec)   : 2=0.01%, 4=0.01%, 10=0.01%, 20=0.01%, 50=0.01%
+  lat (msec)   : 100=0.54%, 250=0.01%, 500=0.01%
+  cpu          : usr=0.10%, sys=0.77%, ctx=167580, majf=1, minf=597
+  IO depths    : 1=100.0%, 2=0.0%, 4=0.0%, 8=0.0%, 16=0.0%, 32=0.0%, >=64=0.0%
+     submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     complete  : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     issued rwts: total=0,24547554,0,0 short=0,0,0,0 dropped=0,0,0,0
+     latency   : target=0, window=0, percentile=100.00%, depth=1
+
+Run status group 0 (all jobs):
+  WRITE: bw=533MiB/s (558MB/s), 533MiB/s-533MiB/s (558MB/s-558MB/s), io=93.6GiB (101GB), run=180059-180059msec
+
+Disk stats (read/write):
+  sda: ios=0/24899, sectors=0/185534032, merge=0/2569, ticks=0/5533728, in_queue=5539192, util=99.00%
+ marek@ideacentre 🭬🭨/mnt/rotalloc 🭬
+ READY▪🭬
+
+BLIND TEST 3 *****************************************************************************
+
+ 19:58:37 /mnt/rotalloc 🭬
+fio --name=allocstress  --directory=.   --rw=write      --bs=4k         --numjobs=48    --size=2G       --ioengine=psync        --time_based    --runtime=180   --group_reporting
+allocstress: (g=0): rw=write, bs=(R) 4096B-4096B, (W) 4096B-4096B, (T) 4096B-4096B, ioengine=psync, iodepth=1
+...
+fio-3.37
+Starting 48 processes
+Jobs: 48 (f=48): [W(48)][100.0%][w=504MiB/s][w=129k IOPS][eta 00m:00s]
+allocstress: (groupid=0, jobs=48): err= 0: pid=3296: Tue Mar  3 20:01:38 2026
+  write: IOPS=136k, BW=532MiB/s (557MB/s)(93.5GiB/180057msec); 0 zone resets
+    clat (nsec): min=1380, max=275547k, avg=352058.36, stdev=4777465.39
+     lat (nsec): min=1416, max=275548k, avg=352115.59, stdev=4777484.18
+    clat percentiles (nsec):
+     |  1.00th=[    1480],  5.00th=[    1752], 10.00th=[    1944],
+     | 20.00th=[    1992], 30.00th=[    2064], 40.00th=[    2224],
+     | 50.00th=[    2480], 60.00th=[    2704], 70.00th=[    2832],
+     | 80.00th=[    3056], 90.00th=[    3408], 95.00th=[    4048],
+     | 99.00th=[    7008], 99.50th=[58458112], 99.90th=[59506688],
+     | 99.95th=[60555264], 99.99th=[89653248]
+   bw (  KiB/s): min=369136, max=8357674, per=100.00%, avg=545168.99, stdev=11390.72, samples=17229
+   iops        : min=92284, max=2089403, avg=136291.66, stdev=2847.67, samples=17229
+  lat (usec)   : 2=20.94%, 4=73.92%, 10=4.30%, 20=0.07%, 50=0.12%
+  lat (usec)   : 100=0.06%, 250=0.01%, 500=0.01%, 750=0.01%, 1000=0.01%
+  lat (msec)   : 2=0.01%, 4=0.01%, 10=0.01%, 20=0.01%, 50=0.01%
+  lat (msec)   : 100=0.56%, 250=0.01%, 500=0.01%
+  cpu          : usr=0.12%, sys=0.78%, ctx=165802, majf=0, minf=538
+  IO depths    : 1=100.0%, 2=0.0%, 4=0.0%, 8=0.0%, 16=0.0%, 32=0.0%, >=64=0.0%
+     submit    : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     complete  : 0=0.0%, 4=100.0%, 8=0.0%, 16=0.0%, 32=0.0%, 64=0.0%, >=64=0.0%
+     issued rwts: total=0,24503838,0,0 short=0,0,0,0 dropped=0,0,0,0
+     latency   : target=0, window=0, percentile=100.00%, depth=1
+
+Run status group 0 (all jobs):
+  WRITE: bw=532MiB/s (557MB/s), 532MiB/s-532MiB/s (557MB/s-557MB/s), io=93.5GiB (100GB), run=180057-180057msec
+
+Disk stats (read/write):
+  sda: ios=0/25387, sectors=0/185073496, merge=0/2315, ticks=0/5564690, in_queue=5570541, util=99.02%
+ marek@ideacentre 🭬🭨/mnt/rotalloc 🭬
+ READY▪🭬
+
+
+| Metrics            | **Test 1** | **Test 2** | **Test 3** |
+| ------------------ | ---------- | ---------- | ---------- |
+| BW (MiB/s)         | 533        | 533        | 532        |
+| IOPS               | 136k       | 136k       | 136k       |
+| Avg clat (µs)      | 351.5      | 351.5      | 352.1      |
+| Stddev clat (µs)   | **5335**   | 4863       | **4777**   |
+| Median (50th) (ns) | 2480       | **2416**   | 2480       |
+| 99th (ns)          | 7520       | **6816**   | 7008       |
+| 99.50th (ms)       | 58.4       | 58.4       | 58.4       |
+| 99.90th (ms)       | 60.5       | 60.5       | **59.5**   |
+| 99.95th (ms)       | **65.8**   | 62.6       | **60.5**   |
+| 99.99th (ms)       | **127**    | 102        | **89**     |
+| Max latency        | **1.46 s** | 268 ms     | 275 ms     |
+| Disk util          | 99.08%     | 99.00%     | 99.02%     |
