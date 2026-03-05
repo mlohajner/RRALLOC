@@ -1,10 +1,14 @@
 # RRALLOC (formerly "rotalloc")
 
-RRALLOC, originally named *rotalloc*,
-has been renamed to better reflect its behavior:
+RRALLOC is an optional ext4 allocation policy exploring alternative
+allocation geometry and reduced concurrency contention, preserving all
+existing heuristics and semantics.
+
+Originally named *rotalloc*, has been renamed to better reflect
+its behavior:
 
 * The name "rotalloc" implied rotational (HDD) storage, whereas this
-policy is **not** optimized for rotational devices.  
+policy is **not** optimized for rotational devices (SSD/NVMe).
 
 * Conceptually, it exhibits **round-robin allocation** behavior,
 hence the new name: RRALLOC (Round-Robin Allocator).  
@@ -39,9 +43,8 @@ main allocator simple and stable.
 The policy was tested locally on **v6.18.9-stable** with the 'rralloc'
 mount option enabled.  
 
-Results confirmed that allocations rotate as expected,
-maintain stream behavior, and preserve performance and correctness of
-the existing allocator.
+Results confirmed that allocations rotate as expected, maintain stream
+behavior, and preserve performance and correctness of the existing allocator.
 ---
 RRALLOC is intended as an **optional, experimental allocation policy**
 to explore alternative allocation geometry and parallel allocation
