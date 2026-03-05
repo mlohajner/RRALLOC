@@ -1,34 +1,48 @@
-# "rralloc" originally named "rotalloc"
+# RRALLOC (formerly "rotalloc")
 
-Now renamed to rralloc:
+RRALLOC, originally named *rotalloc*,
+has been renamed to better reflect its behavior:
 
-* "rotalloc" implied rotational (HDD) storage -while this policy is *not*
-	optimized for rotational devices
-* conceptually, it clearly exhibits round-robin behavior, hence the
-	rename rralloc (round-robin allocator)
-* this patch is V2, slightly more elaborate than the otherwise trivial V1
+* The name "rotalloc" implied rotational (HDD) storage, whereas this
+policy is **not** optimized for rotational devices.  
 
-This patch introduces support for a round-robin allocation policy as a
-new mount option.
+* Conceptually, it exhibits **round-robin allocation** behavior,
+hence the new name: RRALLOC (Round-Robin Allocator).  
 
-The policy rotates the starting block group for new allocations across
-per-CPU dedicated LBA zones.
+* This is **V2** of the patch, slightly more elaborate than the initial
+trivial V1.
 
-It is selected via the mount option (rralloc) and does not modify the
-on-disk format.
+## Overview
 
-The policy enforces existing stream allocation behavior (for all files)
-to help distribute allocations across block groups in a more sequential
-and balanced manner.
+This patch introduces an optional **round-robin allocation policy**
+as a new EXT4 mount option (`rralloc`).  
 
-The rotating allocator is implemented as a separate allocation path
-selected at mount time.
+Key characteristics:
 
-This avoids introducing additional conditional branches into the regular
-allocator and keeps allocation policies isolated.
+* Rotates the starting block group for new allocations
+across **per-CPU dedicated LBA zones**.  
 
-It also allows the rotating allocator to evolve independently in the
-future without increasing the complexity of the regular allocator.
+* Enforces **stream allocation** for all files, helping distribute
+allocations sequentially and evenly across block groups.  
 
-The policy was tested locally on v6.18.9-stable with the new mount
-option (rralloc) enabled and was confirmed to work as described.
+* Implemented as a **separate allocation path**, avoiding additional
+conditional branches in the regular allocator.  
+
+* Does **not modify the on-disk format**; safe to enable without
+affecting existing data.  
+
+* Allows the rotating allocator to evolve independently, keeping the
+main allocator simple and stable.
+
+## Testing
+
+The policy was tested locally on **v6.18.9-stable** with the 'rralloc'
+mount option enabled.  
+
+Results confirmed that allocations rotate as expected,
+maintain stream behavior, and preserve performance and correctness of
+the existing allocator.
+---
+RRALLOC is intended as an **optional, experimental allocation policy**
+to explore alternative allocation geometry and parallel allocation
+strategies without impacting the default EXT4 behavior.
