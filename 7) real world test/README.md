@@ -1,4 +1,4 @@
-# Real-World Example – Linux Kernel Tree
+# Real-World Example – Linux Kernel Tree - DIRECT COMPARISON
 
 Workload:
 Source: Linux kernel tree
