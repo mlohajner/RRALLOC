@@ -16,7 +16,7 @@ its behavior:
 
 ## NEWS (V3)
 
-* **Tested and validated against Fedora's kernel 7.1.3.** [The patch](2) the patch) is
+* **Tested and validated against Fedora's kernel 7.1.3.** [The patch](2%29%20the%20patch) is
   directly applicable to the Fedora 7.1.3 kernel tree with no
   additional adaptation required.
 * The regular allocator path has been modified in line with the
