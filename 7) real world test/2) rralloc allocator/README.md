@@ -30,7 +30,7 @@ comparison.
 ## Why this matters
 
 This is the direct contrast to the **in-place overwrite** pattern seen with
-the regular allocator (see `1) regular allocator/README.md`): there, repeated
+the regular allocator [(see `1) regular allocator/README.md`)](../1%29%20regular%20allocator/README.md): there, repeated
 copies/overwrites kept re-concentrating in the same block groups, because
 goal selection is influenced by the previous allocation state. That
 concentration is what produces allocation contention and hotspotting under
