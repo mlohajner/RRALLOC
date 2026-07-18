@@ -4,6 +4,20 @@ RRALLOC is an optional ext4 allocation policy exploring alternative
 allocation geometry and reduced concurrency contention, preserving all
 existing heuristics and semantics.
 
+**📊 Real-life tests & benefits:** repeated copy/overwrite cycles on a full
+Linux kernel tree (~180,000 files, ~27 GiB) show `rralloc` breaking up the
+in-place overwrite hotspotting seen with the regular allocator — see the
+[real-world test comparison](7)%20real%20world%20test/README.md) for the
+full writeup and allocation maps. Quick preview:
+
+<p align="center">
+  <img src="7)%20real%20world%20test/2)%20rralloc%20allocator/8)%20allocation%20map.svg" width="420" alt="rralloc allocation map, third copy — allocations spread across the LBA instead of re-concentrating">
+</p>
+
+<p align="center"><sub>Third copy under <code>rralloc</code> — allocations stay spread across the LBA instead of piling back into the same block groups. Full before/after comparison in the <a href="7)%20real%20world%20test/README.md">real-world test</a>.</sub></p>
+
+---
+
 Originally named *rotalloc*, has been renamed to better reflect
 its behavior:
 
@@ -65,6 +79,11 @@ Results confirmed that:
 * The new per-inode atomic cursor correctly maintains intra-file
   locality without relying on the previous global hash-array lookup.
 * Performance and correctness of the existing allocator are preserved.
+
+See the [real-world test comparison](7)%20real%20world%20test/README.md)
+for results on a full-size, real-world workload (Linux kernel tree copy +
+repeated overwrite cycles), alongside the regular allocator for direct
+comparison.
 
 ---
 
