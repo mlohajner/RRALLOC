@@ -1,6 +1,6 @@
 # RRALLOC (formerly "rotalloc")
 
-RRALLOC is an optional ext4 allocation policy exploring alternative
+RRALLOC is an optional EXT4 allocation policy exploring alternative
 allocation geometry and reduced concurrency contention, preserving all
 existing heuristics and semantics.
 
