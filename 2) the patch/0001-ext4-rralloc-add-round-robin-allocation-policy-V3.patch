@@ -1,0 +1,392 @@
+From b613ec044e6b068a3968ea04cca69a9029c5a456 Mon Sep 17 00:00:00 2001
+From: Mario Lohajner <mario_lohajner@rocketmail.com>
+Date: Sun, 19 Jul 2026 00:11:06 +0200
+Subject: [PATCH] ext4: rralloc - add round-robin allocation policy and
+ optimize stream mode
+
+V3 is a progressive upgrade from V2:
+- maintains standard rralloc features
+- per-CPU starting points to minimize lock contention.
+- per-inode atomic cursors
+- strict allocator isolation
+- rralloc remains an optional mount flag.
+NEW:
+- Reworked standard allocator stream mode to use atomic per-inode cursors
+  instead of the legacy hash array of global goals to improve tail latency.
+- Built directly for and verified against the recent Fedora v7.1.3 kernel tree.
+
+Modified structures:
+- fs/ext4/ext4.h    : Declare rralloc policy, per-CPU cursors, and allocator vector.
+- fs/ext4/ialloc.c  : Initialize (zero out) the per-inode cursor.
+- fs/ext4/mballoc.h : Expose allocator functions for tracking inside super.c.
+- fs/ext4/super.c   : Parse rralloc mount option, initialize per-CPU cursors.
+- fs/ext4/mballoc.c : Implement rotating allocator and vectored allocation path.
+
+Signed-off-by: Mario Lohajner <mario_lohajner@rocketmail.com>
+---
+ fs/ext4/ext4.h    |  14 +++--
+ fs/ext4/ialloc.c  |   3 +-
+ fs/ext4/mballoc.c | 129 ++++++++++++++++++++++++++++++++++++++--------
+ fs/ext4/mballoc.h |   4 ++
+ fs/ext4/super.c   |  33 +++++++++++-
+ 5 files changed, 154 insertions(+), 29 deletions(-)
+
+diff --git a/fs/ext4/ext4.h b/fs/ext4/ext4.h
+index 94283a991e5c..d63c99e060be 100644
+--- a/fs/ext4/ext4.h
++++ b/fs/ext4/ext4.h
+@@ -228,6 +228,9 @@ struct ext4_allocation_request {
+ 	unsigned int flags;
+ };
+ 
++/* rralloc show pointer type to compiler */
++struct ext4_allocation_context;
++
+ /*
+  * Logical to physical block mapping, used by ext4_map_blocks()
+  *
+@@ -1031,7 +1034,8 @@ struct ext4_inode_info {
+ 	__le32	i_data[15];	/* unconverted */
+ 	__u32	i_dtime;
+ 	ext4_fsblk_t	i_file_acl;
+-
++	/* rralloc per inode cursor */
++	atomic_t	cursor;
+ 	/*
+ 	 * i_block_group is the number of the block group which contains
+ 	 * this file's inode.  Constant across the lifetime of the inode,
+@@ -1214,6 +1218,7 @@ struct ext4_inode_info {
+  * Mount flags set via mount options or defaults
+  */
+ #define EXT4_MOUNT_NO_MBCACHE		0x00001 /* Do not use mbcache */
++#define EXT4_MOUNT_RRALLOC			0x00002 /* Use round-robin policy/allocator */
+ #define EXT4_MOUNT_GRPID		0x00004	/* Create files with directory's group */
+ #define EXT4_MOUNT_DEBUG		0x00008	/* Some debugging messages */
+ #define EXT4_MOUNT_ERRORS_CONT		0x00010	/* Continue on errors */
+@@ -1543,6 +1548,9 @@ struct ext4_sb_info {
+ 	unsigned long s_mount_flags;
+ 	unsigned int s_def_mount_opt;
+ 	unsigned int s_def_mount_opt2;
++	/* rralloc per-cpu cursors and allocator vector */
++	ext4_group_t __percpu *s_rralloc_cursor;
++	int (*s_vectored_allocator)(struct ext4_allocation_context *ac);
+ 	ext4_fsblk_t s_sb_block;
+ 	atomic64_t s_resv_clusters;
+ 	kuid_t s_resuid;
+@@ -1632,10 +1640,6 @@ struct ext4_sb_info {
+ 	unsigned int s_sb_update_sec;
+ 	unsigned int s_sb_update_kb;
+ 
+-	/* where last allocation was done - for stream allocation */
+-	ext4_group_t *s_mb_last_groups;
+-	unsigned int s_mb_nr_global_goals;
+-
+ 	/* stats for buddy allocator */
+ 	atomic_t s_bal_reqs;	/* number of reqs with len > 1 */
+ 	atomic_t s_bal_success;	/* we found long enough chunks */
+diff --git a/fs/ext4/ialloc.c b/fs/ext4/ialloc.c
+index 3fd8f0099852..4d7ad0b2a19f 100644
+--- a/fs/ext4/ialloc.c
++++ b/fs/ext4/ialloc.c
+@@ -968,7 +968,8 @@ struct inode *__ext4_new_inode(struct mnt_idmap *idmap,
+ 	if (!inode)
+ 		return ERR_PTR(-ENOMEM);
+ 	ei = EXT4_I(inode);
+-
++	/* Zero the rralloc per-inode cursor */
++	atomic_set(&ei->cursor, 0);
+ 	/*
+ 	 * Initialize owners and quota early so that we don't have to account
+ 	 * for quota initialization worst case in standard inode creating
+diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+index ed1bd00e11cd..678a1286c2c3 100644
+--- a/fs/ext4/mballoc.c
++++ b/fs/ext4/mballoc.c
+@@ -2268,9 +2268,12 @@ static void ext4_mb_use_best_found(struct ext4_allocation_context *ac,
+ 	folio_get(ac->ac_buddy_folio);
+ 	/* store last allocated for subsequent stream allocation */
+ 	if (ac->ac_flags & EXT4_MB_STREAM_ALLOC) {
+-		int hash = (unsigned int)ac->ac_inode->i_ino % sbi->s_mb_nr_global_goals;
+-
+-		WRITE_ONCE(sbi->s_mb_last_groups[hash], ac->ac_f_ex.fe_group);
++		/* update global goals = update inode cursor and current per-cpu cursor */
++		ext4_group_t cursor = ac->ac_f_ex.fe_group;
++		struct ext4_inode_info *ei = EXT4_I(ac->ac_inode);
++		atomic_set(&ei->cursor, cursor);
++		if (test_opt(ac->ac_sb, RRALLOC))
++			*this_cpu_ptr(sbi->s_rralloc_cursor) = cursor;
+ 	}
+ 
+ 	/*
+@@ -2997,7 +3000,7 @@ static int ext4_mb_scan_group(struct ext4_allocation_context *ac,
+ 	return ret;
+ }
+ 
+-static noinline_for_stack int
++noinline_for_stack int
+ ext4_mb_regular_allocator(struct ext4_allocation_context *ac)
+ {
+ 	ext4_group_t i;
+@@ -3038,9 +3041,8 @@ ext4_mb_regular_allocator(struct ext4_allocation_context *ac)
+ 
+ 	/* if stream allocation is enabled, use global goal */
+ 	if (ac->ac_flags & EXT4_MB_STREAM_ALLOC) {
+-		int hash = (unsigned int)ac->ac_inode->i_ino % sbi->s_mb_nr_global_goals;
+-
+-		ac->ac_g_ex.fe_group = READ_ONCE(sbi->s_mb_last_groups[hash]);
++		struct ext4_inode_info *ei = EXT4_I(ac->ac_inode);
++		ac->ac_g_ex.fe_group = atomic_read(&ei->cursor);
+ 		ac->ac_g_ex.fe_start = -1;
+ 		ac->ac_flags &= ~EXT4_MB_HINT_TRY_GOAL;
+ 	}
+@@ -3117,6 +3119,102 @@ ext4_mb_regular_allocator(struct ext4_allocation_context *ac)
+ 	return err;
+ }
+ 
++/* Rotating allocator (round-robin) */
++noinline_for_stack int
++ext4_mb_rotating_allocator(struct ext4_allocation_context *ac)
++{
++	ext4_group_t goal;
++	int err = 0;
++	struct super_block *sb = ac->ac_sb;
++	struct ext4_sb_info *sbi = EXT4_SB(sb);
++	struct ext4_buddy e4b;
++	struct ext4_inode_info *ei = EXT4_I(ac->ac_inode);
++
++	/* if inode cursor=0, use per-cpu cursor */
++	ext4_group_t start = *this_cpu_ptr(sbi->s_rralloc_cursor);
++	goal = atomic_cmpxchg(&ei->cursor, 0, start);
++	if (!goal)
++		goal = start;
++
++	ac->ac_g_ex.fe_group = goal;
++
++	/* first, try the goal */
++	err = ext4_mb_find_by_goal(ac, &e4b);
++	if (err || ac->ac_status == AC_STATUS_FOUND)
++		goto out;
++
++	/* RRallocation promotes stream behavior */
++	ac->ac_flags |= EXT4_MB_STREAM_ALLOC;
++	ac->ac_flags |= EXT4_MB_HINT_FIRST;
++	ac->ac_flags &= ~EXT4_MB_HINT_GOAL_ONLY;
++	ac->ac_g_ex.fe_group = goal;
++	ac->ac_g_ex.fe_start = -1;
++	ac->ac_2order = 0;
++	ac->ac_criteria = CR_ANY_FREE;
++	ac->ac_e4b = &e4b;
++	ac->ac_prefetch_ios = 0;
++	ac->ac_first_err = 0;
++repeat:
++	while (ac->ac_criteria < EXT4_MB_NUM_CRS) {
++		err = ext4_mb_scan_groups(ac);
++		if (err)
++			goto out;
++
++		if (ac->ac_status != AC_STATUS_CONTINUE)
++			break;
++	}
++
++	if (ac->ac_b_ex.fe_len > 0 && ac->ac_status != AC_STATUS_FOUND &&
++	    !(ac->ac_flags & EXT4_MB_HINT_FIRST)) {
++		/*
++		 * We've been searching too long. Let's try to allocate
++		 * the best chunk we've found so far
++		 */
++		ext4_mb_try_best_found(ac, &e4b);
++		if (ac->ac_status != AC_STATUS_FOUND) {
++			int lost;
++
++			/*
++			 * Someone more lucky has already allocated it.
++			 * The only thing we can do is just take first
++			 * found block(s)
++			 */
++			lost = atomic_inc_return(&sbi->s_mb_lost_chunks);
++			mb_debug(sb, "lost chunk, group: %u, start: %d, len: %d, lost: %d\n",
++				 ac->ac_b_ex.fe_group, ac->ac_b_ex.fe_start,
++				 ac->ac_b_ex.fe_len, lost);
++
++			ac->ac_b_ex.fe_group = 0;
++			ac->ac_b_ex.fe_start = 0;
++			ac->ac_b_ex.fe_len = 0;
++			ac->ac_status = AC_STATUS_CONTINUE;
++			ac->ac_flags |= EXT4_MB_HINT_FIRST;
++			ac->ac_criteria = CR_ANY_FREE;
++			goto repeat;
++		}
++	}
++
++	if (sbi->s_mb_stats && ac->ac_status == AC_STATUS_FOUND) {
++		atomic64_inc(&sbi->s_bal_cX_hits[ac->ac_criteria]);
++		if (ac->ac_flags & EXT4_MB_STREAM_ALLOC &&
++		    ac->ac_b_ex.fe_group == ac->ac_g_ex.fe_group)
++			atomic_inc(&sbi->s_bal_stream_goals);
++	}
++
++out:
++	if (!err && ac->ac_status != AC_STATUS_FOUND && ac->ac_first_err)
++		err = ac->ac_first_err;
++
++	mb_debug(sb, "Best len %d, origin len %d, ac_status %u, ac_flags 0x%x, cr %d ret %d\n",
++		 ac->ac_b_ex.fe_len, ac->ac_o_ex.fe_len, ac->ac_status,
++		 ac->ac_flags, ac->ac_criteria, err);
++
++	if (ac->ac_prefetch_nr)
++		ext4_mb_prefetch_fini(sb, ac->ac_prefetch_grp, ac->ac_prefetch_nr);
++
++	return err;
++}
++
+ static void *ext4_mb_seq_groups_start(struct seq_file *seq, loff_t *pos)
+ {
+ 	struct super_block *sb = pde_data(file_inode(seq->file));
+@@ -3817,15 +3915,6 @@ int ext4_mb_init(struct super_block *sb)
+ 			sbi->s_mb_group_prealloc, EXT4_NUM_B2C(sbi, sbi->s_stripe));
+ 	}
+ 
+-	sbi->s_mb_nr_global_goals = umin(num_possible_cpus(),
+-					 DIV_ROUND_UP(sbi->s_groups_count, 4));
+-	sbi->s_mb_last_groups = kzalloc_objs(ext4_group_t,
+-					     sbi->s_mb_nr_global_goals);
+-	if (sbi->s_mb_last_groups == NULL) {
+-		ret = -ENOMEM;
+-		goto out;
+-	}
+-
+ 	sbi->s_locality_groups = alloc_percpu(struct ext4_locality_group);
+ 	if (sbi->s_locality_groups == NULL) {
+ 		ret = -ENOMEM;
+@@ -3855,8 +3944,6 @@ int ext4_mb_init(struct super_block *sb)
+ 	free_percpu(sbi->s_locality_groups);
+ 	sbi->s_locality_groups = NULL;
+ out_free_last_groups:
+-	kfree(sbi->s_mb_last_groups);
+-	sbi->s_mb_last_groups = NULL;
+ out:
+ 	ext4_mb_avg_fragment_size_destroy(sbi);
+ 	ext4_mb_largest_free_orders_destroy(sbi);
+@@ -3951,9 +4038,6 @@ void ext4_mb_release(struct super_block *sb)
+ 				atomic_read(&sbi->s_mb_preallocated),
+ 				atomic_read(&sbi->s_mb_discarded));
+ 	}
+-
+-	free_percpu(sbi->s_locality_groups);
+-	kfree(sbi->s_mb_last_groups);
+ }
+ 
+ static inline int ext4_issue_discard(struct super_block *sb,
+@@ -6307,7 +6391,8 @@ ext4_fsblk_t ext4_mb_new_blocks(handle_t *handle,
+ 			goto errout;
+ repeat:
+ 		/* allocate space in core */
+-		*errp = ext4_mb_regular_allocator(ac);
++		/* use vector separation for rralloc allocator */
++		*errp = sbi->s_vectored_allocator(ac);
+ 		/*
+ 		 * pa allocated above is added to grp->bb_prealloc_list only
+ 		 * when we were able to allocate some block i.e. when
+diff --git a/fs/ext4/mballoc.h b/fs/ext4/mballoc.h
+index 39333ce72cbd..71161ec854ef 100644
+--- a/fs/ext4/mballoc.h
++++ b/fs/ext4/mballoc.h
+@@ -299,5 +299,9 @@ extern void mb_free_blocks_test(struct inode *inode,
+ 		struct ext4_buddy *e4b, int first, int count);
+ extern void ext4_free_blocks_simple_test(struct inode *inode,
+ 		ext4_fsblk_t block, unsigned long count);
++
++/* Expose rotating & regular allocator for vectoring */
++int ext4_mb_rotating_allocator(struct ext4_allocation_context *ac);
++int ext4_mb_regular_allocator(struct ext4_allocation_context *ac);
+ #endif
+ #endif
+diff --git a/fs/ext4/super.c b/fs/ext4/super.c
+index 6a77db4d3124..a2f03bffafaf 100644
+--- a/fs/ext4/super.c
++++ b/fs/ext4/super.c
+@@ -1286,6 +1286,10 @@ static void ext4_put_super(struct super_block *sb)
+ 	int aborted = 0;
+ 	int err;
+ 
++	/* free per cpu cursors */
++	if (sbi->s_rralloc_cursor)
++		free_percpu(sbi->s_rralloc_cursor);
++
+ 	/*
+ 	 * Unregister sysfs before destroying jbd2 journal.
+ 	 * Since we could still access attr_journal_task attribute via sysfs
+@@ -1706,7 +1710,7 @@ enum {
+ 	Opt_nomblk_io_submit, Opt_block_validity, Opt_noblock_validity,
+ 	Opt_inode_readahead_blks, Opt_journal_ioprio,
+ 	Opt_dioread_nolock, Opt_dioread_lock,
+-	Opt_discard, Opt_nodiscard, Opt_init_itable, Opt_noinit_itable,
++	Opt_discard, Opt_nodiscard, Opt_init_itable, Opt_noinit_itable, Opt_rralloc,
+ 	Opt_max_dir_size_kb, Opt_nojournal_checksum, Opt_nombcache,
+ 	Opt_no_prefetch_block_bitmaps, Opt_mb_optimize_scan,
+ 	Opt_errors, Opt_data, Opt_data_err, Opt_jqfmt, Opt_dax_type,
+@@ -1830,6 +1834,7 @@ static const struct fs_parameter_spec ext4_param_specs[] = {
+ 	fsparam_u32	("init_itable",		Opt_init_itable),
+ 	fsparam_flag	("init_itable",		Opt_init_itable),
+ 	fsparam_flag	("noinit_itable",	Opt_noinit_itable),
++	fsparam_flag	("rralloc",	Opt_rralloc),
+ #ifdef CONFIG_EXT4_DEBUG
+ 	fsparam_flag	("fc_debug_force",	Opt_fc_debug_force),
+ 	fsparam_u32	("fc_debug_max_replay",	Opt_fc_debug_max_replay),
+@@ -1911,6 +1916,7 @@ static const struct mount_opts {
+ 	{Opt_noauto_da_alloc, EXT4_MOUNT_NO_AUTO_DA_ALLOC, MOPT_SET},
+ 	{Opt_auto_da_alloc, EXT4_MOUNT_NO_AUTO_DA_ALLOC, MOPT_CLEAR},
+ 	{Opt_noinit_itable, EXT4_MOUNT_INIT_INODE_TABLE, MOPT_CLEAR},
++	{Opt_rralloc, EXT4_MOUNT_RRALLOC, MOPT_SET},
+ 	{Opt_dax_type, 0, MOPT_EXT4_ONLY},
+ 	{Opt_journal_dev, 0, MOPT_NO_EXT2},
+ 	{Opt_journal_path, 0, MOPT_NO_EXT2},
+@@ -2297,6 +2303,9 @@ static int ext4_parse_param(struct fs_context *fc, struct fs_parameter *param)
+ 			ctx->s_li_wait_mult = result.uint_32;
+ 		ctx->spec |= EXT4_SPEC_s_li_wait_mult;
+ 		return 0;
++	case Opt_rralloc:
++		ctx_set_mount_opt(ctx, EXT4_MOUNT_RRALLOC);
++		return 0;
+ 	case Opt_max_dir_size_kb:
+ 		ctx->s_max_dir_size_kb = result.uint_32;
+ 		ctx->spec |= EXT4_SPEC_s_max_dir_size_kb;
+@@ -5343,6 +5352,9 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
+ 	struct ext4_fs_context *ctx = fc->fs_private;
+ 	int silent = fc->sb_flags & SB_SILENT;
+ 
++	/* Unconditional default regular allocator (rralloc separation) */
++	sbi->s_vectored_allocator = ext4_mb_regular_allocator;
++
+ 	/* Set defaults for the variables that will be set during parsing */
+ 	if (!(ctx->spec & EXT4_SPEC_JOURNAL_IOPRIO))
+ 		ctx->journal_ioprio = EXT4_DEF_JOURNAL_IOPRIO;
+@@ -5555,6 +5567,25 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
+ 		}
+ 	}
+ 
++	/* rralloc: initialize per-cpu cursors and rotational allocator */
++	if (test_opt(sb, RRALLOC)) {
++		sbi->s_rralloc_cursor = alloc_percpu(ext4_group_t);
++		if (!sbi->s_rralloc_cursor)
++			return -ENOMEM;
++
++		int ncpus = num_possible_cpus();
++		ext4_group_t total_groups = ext4_get_groups_count(sb);
++		ext4_group_t groups_per_cpu = total_groups / ncpus;
++
++		int cpu;
++		for_each_possible_cpu(cpu) {
++			*per_cpu_ptr(sbi->s_rralloc_cursor, cpu) = cpu * groups_per_cpu;
++		}
++
++		/* Vectored allocator to round-robin allocator */
++		sbi->s_vectored_allocator = ext4_mb_rotating_allocator;
++	}
++
+ 	/*
+ 	 * Get the # of file system overhead blocks from the
+ 	 * superblock if present.
+-- 
+2.55.0
+
