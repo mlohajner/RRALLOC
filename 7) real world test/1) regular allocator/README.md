@@ -8,7 +8,7 @@ The maps below show three successive copies of the same file, written to
 
 | First copy | Second copy | Third copy |
 | --- | --- | --- |
-| [First copy](4)%20allocation_map.svg) | [Second copy](6)%20allocation_map.svg) | [Third copy](8)%20allocation_map.svg) |
+| [First copy](4)%29%20allocation_map.svg) | [Second copy](6%29%20allocation_map.svg) | [Third copy](8%29%20allocation_map.svg) |
 
 ## What the maps show
 
