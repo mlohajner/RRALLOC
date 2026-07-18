@@ -80,7 +80,7 @@ Results confirmed that:
   locality without relying on the previous global hash-array lookup.
 * Performance and correctness of the existing allocator are preserved.
 
-See the [real-world test comparison](7)%20real%20world%20test/README.md)
+See the [real-world test comparison](7%29%20real%20world%20test/README.md)
 for results on a full-size, real-world workload (Linux kernel tree copy +
 repeated overwrite cycles), alongside the regular allocator for direct
 comparison.
