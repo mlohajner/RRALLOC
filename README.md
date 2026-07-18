@@ -7,7 +7,7 @@ existing heuristics and semantics.
 **📊 Real-life tests & benefits:** repeated copy/overwrite cycles on a full
 Linux kernel tree (~180,000 files, ~27 GiB) show `rralloc` breaking up the
 in-place overwrite hotspotting seen with the regular allocator — see the
-[real-world test comparison](7)%20real%20world%20test/README.md) for the
+[real-world test comparison](7%29%20real%20world%20test/README.md) for the
 full writeup and allocation maps. Quick preview:
 
 <p align="center">
