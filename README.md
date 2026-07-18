@@ -18,16 +18,6 @@ full writeup and allocation maps. Quick preview:
 
 ---
 
-Originally named *rotalloc*, has been renamed to better reflect
-its behavior:
-
-* The name "rotalloc" implied rotational (HDD) storage, whereas this
-  policy is **not** optimized for rotational devices (SSD/NVMe).
-* Conceptually, it exhibits **round-robin allocation** behavior,
-  hence the new name: RRALLOC (Round-Robin Allocator).
-
----
-
 ## NEWS (V3)
 
 * **Tested and validated against Fedora's kernel 7.1.3.** [The patch](2%29%20the%20patch) is
