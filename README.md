@@ -1,3 +1,5 @@
+<h1 align="center"> <img src="rralloc_icon.gif" width="40" valign="middle" alt="RRALLOC icon"> RRALLOC (formerly "rotalloc") </h1>
+
 # RRALLOC (formerly "rotalloc")
 
 RRALLOC is an optional EXT4 allocation policy exploring alternative
