@@ -1,6 +1,4 @@
-<h1 align="center"> <img src="rralloc_icon.gif" width="40" valign="middle" alt="RRALLOC icon"> RRALLOC (formerly "rotalloc") </h1>
-
-# RRALLOC (formerly "rotalloc")
+<h1> <img src="rralloc_icon.gif" width="40" valign="middle" alt="RRALLOC icon"> RRALLOC (formerly "rotalloc") </h1>
 
 RRALLOC is an optional EXT4 allocation policy exploring alternative
 allocation geometry and reduced concurrency contention, preserving all
