@@ -60,7 +60,7 @@ Key characteristics:
 The policy was tested locally on **v6.18.9-stable** (V1/V2 baseline)
 and has now been further tested and validated against **Fedora's
 kernel 7.1.3**, with the `rralloc` mount option enabled. The patch
-applies **directly** to the Fedora 7.1.3 kernel tree.
+V3 applies **directly** to the Fedora 7.1.3 kernel tree.
 
 Results confirmed that:
 
